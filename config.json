@@ -1,5 +1,5 @@
 {
-    "stream_url": "http://172.24.29.242:8080/video",
+    "stream_url": "http://172.24.80.213:8080/video",
     "img_input_resolution": [360, 640],
     "img_output_resolution": [640, 480],
     "camera_calibration": {
