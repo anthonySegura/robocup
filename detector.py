@@ -62,13 +62,10 @@ class Detector:
         idxs = cv2.dnn.NMSBoxes(boxes, confidences, self.min_confidence, self.threshold)
         result, ang, dists = self.__get_angles_and_distances(idxs, boxes, classIDS)
         # Diccionario con la imagen, distancia y angulo de rotacion por cada clase encontrada
-        # return {
-        #     "ploted_img": self.__plot_results(image, idxs, boxes, confidences, classIDS, ang, dists),
-        #     "location_data": result
-        # }
-        return self.__plot_results(
-            image, idxs, boxes, confidences, classIDS, ang, dists
-        )
+        return {
+            "ploted_img": self.__plot_results(image, idxs, boxes, confidences, classIDS, ang, dists),
+            "location_data": result
+        }
         
     def __get_angles_and_distances(self, idxs, boxes, classIDS):
         angles = []
@@ -86,6 +83,7 @@ class Detector:
                 rot_angle = rotation_angle(
                     class_, (x_center, y_center), (X_CENTER, Y_CENTER)
                 )
+                # w = w // w
                 distance = get_distance_to_object(class_, w)
                 angles.append(rot_angle)
                 distances.append(distance)
@@ -102,6 +100,7 @@ class Detector:
                 cv2.rectangle(image, (x, y), (x + w, y + h), color, 8)
                 text = "{}: {:.4f} cm".format(self.labels[classIDS[i]], distances[i - 1])
                 #text = "{}: {:.4f}".format(self.labels[classIDS[i]], angles[i - 1])
+                #text = "{}: {:.4f}".format(self.labels[classIDS[i]], confidences[i])
                 cv2.putText(
                     image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 2.5, color, 2
                 )
