@@ -1,0 +1,25 @@
+{
+    "stream_url": "http://192.168.43.1:8080/video",
+    "img_input_resolution": [360, 640],
+    "img_output_resolution": [640, 480],
+    "camera_calibration": {
+        "ball": {
+            "known_width_cm": 6.15,
+            "pixels_width": 300,
+            "distance_cm": 20
+        },
+        "mark": {
+            "known_width_cm": 15.71,
+            "pixels_width": 890,
+            "distance_cm": 20
+        }
+    },
+    "yolo_config": {
+        "input_size": [416, 416],
+        "network_cfg": "yolo/yolov3-tiny.cfg",
+        "weights": "yolo/yolov3-tiny_final.weights",
+        "names": "yolo/coco.names",
+        "min_confidence": 0.5,
+        "threshold": 0.3
+    }
+}
