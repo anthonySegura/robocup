@@ -98,9 +98,9 @@ class Detector:
                 w, h = boxes[i][2], boxes[i][3]
                 color = [int(c) for c in self.colors[classIDS[i]]]
                 cv2.rectangle(image, (x, y), (x + w, y + h), color, 8)
-                text = "{}: {:.4f} cm".format(self.labels[classIDS[i]], distances[i - 1])
+                #text = "{}: {:.4f} cm".format(self.labels[classIDS[i]], distances[i - 1])
                 #text = "{}: {:.4f}".format(self.labels[classIDS[i]], angles[i - 1])
-                #text = "{}: {:.4f}".format(self.labels[classIDS[i]], confidences[i])
+                text = "{}: {:.4f}".format(self.labels[classIDS[i]], confidences[i])
                 cv2.putText(
                     image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 2.5, color, 2
                 )

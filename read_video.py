@@ -10,32 +10,41 @@ from PIL import Image, ImageTk
 from detector import Detector
 import time
 import serial 
-ser = serial.Serial('COM7', 9600)
+from threading import Thread
+from SpeechRecognize import start_listening
+#ser = serial.Serial('COM7', 9600)
+
+'''
+    Se manda la parte de recocimiento de voz a otro hilo, desde ahí se tienen que mandar las ordenes
+    mediante la clase actionsController
+'''
+speech_recognition_thread = Thread(target=start_listening)
+speech_recognition_thread.setDaemon(True)
+speech_recognition_thread.start()
+
+# def buscar():
+#     izquierda()
+
+# def forward(distance):
+#     print("forward"+str(distance+10))
+#     ser.write(str.encode('F'))
+#     time.sleep((distance/96))
+#     ser.write(str.encode('S'))
 
 
-def buscar():
-    izquierda()
 
-def forward(distance):
-    print("forward"+str(distance+10))
-    ser.write(str.encode('F'))
-    time.sleep((distance/96))
-    ser.write(str.encode('S'))
+# def buscarMarco(distancia):
+#     derecha()
+#     forward(distancia)
+#     izquierda()
 
+# def derecha():
+#     ser.write(str.encode('R'))
+#     pass
 
-
-def buscarMarco(distancia):
-    derecha()
-    forward(distancia)
-    izquierda()
-
-def derecha():
-    ser.write(str.encode('R'))
-    pass
-
-def izquierda():
-    ser.write(str.encode('L'))
-    pass
+# def izquierda():
+#     ser.write(str.encode('L'))
+#     pass
 
 with open("config.json", "r") as file:
     config = json.load(file)
@@ -51,8 +60,8 @@ mainFrame.place(x=0, y=0)
 lmain = tk.Label(mainFrame)
 lmain.grid(row=0, column=0)
 
-cap = cv2.VideoCapture(config['stream_url'])
-#cap = cv2.VideoCapture('video_3.mp4')
+#cap = cv2.VideoCapture(config['stream_url'])
+cap = cv2.VideoCapture('video_3.mp4')
 # cap = VideoStream(config['stream_url']).start()
 # time.sleep(2)
 
@@ -61,8 +70,8 @@ def show_frame():
     ret, frame = cap.read()
     detections = yolo_detector.detect(frame)
     if (detections["location_data"] == {}):
-        buscar()
-
+        #buscar()
+        pass
         
     if (detections["location_data"] != {}):
         detectionsAux = detections["location_data"]
@@ -85,13 +94,14 @@ def show_frame():
                 pass
 
         if (markAngleDistance != None and ballAngleDistance == None):
-            buscar()
-        
+            #buscar()
+            pass
         if (ballAngleDistance != None and markAngleDistance != None):
             if (ballAngleDistance['rot_angle'] <5 and ballAngleDistance['rot_angle'] > -5):
                 forward(ballAngleDistance['distance'])
             else:
-                buscarMarco(ballAngleDistance['distance'])
+                pass
+                #buscarMarco(ballAngleDistance['distance'])
             
 
 

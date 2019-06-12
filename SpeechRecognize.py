@@ -4,10 +4,11 @@ import wave
 import requests
 import json
 import serial 
+import time
 
 API_ENDPOINT = 'https://api.wit.ai/speech'
 ACCESS_TOKEN = '3ZGSGWG2Q4DE4JUH3CBMGPVOUYVVUHL4'
-ser = serial.Serial('COM7', 9600)
+#ser = serial.Serial('COM7', 9600)
 
 def record_audio(RECORD_SECONDS, WAVE_OUTPUT_FILENAME):
     #--------- SETTING PARAMS FOR OUR AUDIO FILE ------------#
@@ -106,6 +107,14 @@ def Move(arg):
     #ser.write(str.encode(instruction))
     print(instruction)
 
-if __name__ == "__main__":
+def start_listening():
+    count = 1
     while True:
-        text =  RecognizeSpeech('myspeech.wav', 4)
+         print(count)
+         count += 1
+         time.sleep(0.1) # Necesario para que python no mate al hilo, probar con diferentes tiempos
+         #text = RecognizeSpeech('myspeech.wav', 4)
+
+# if __name__ == "__main__":
+#     while True:
+#         text =  RecognizeSpeech('myspeech.wav', 4)
