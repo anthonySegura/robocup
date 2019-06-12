@@ -10,10 +10,12 @@ from PIL import Image, ImageTk
 from detector import Detector
 import time
 import serial 
-ser = serial.Serial('COM7', 9600)
+ser = serial.Serial('COM5', 9600)
 
 
 def buscar():
+    print("buscar")
+    time.sleep(1)
     izquierda()
 
 def forward(distance):
@@ -25,17 +27,20 @@ def forward(distance):
 
 
 def buscarMarco(distancia):
+    print("buscar marco")
     derecha()
     forward(distancia)
     izquierda()
 
 def derecha():
+    print("derecha")
     ser.write(str.encode('R'))
-    pass
+    #time.sleep(1)
 
 def izquierda():
+    print("izquierda")
     ser.write(str.encode('L'))
-    pass
+    #time.sleep(1)
 
 with open("config.json", "r") as file:
     config = json.load(file)
@@ -56,47 +61,49 @@ cap = cv2.VideoCapture(config['stream_url'])
 # cap = VideoStream(config['stream_url']).start()
 # time.sleep(2)
 
+count = 0
+
 # Ciclo principal
 def show_frame():
+    global count
     ret, frame = cap.read()
-    detections = yolo_detector.detect(frame)
-    if (detections["location_data"] == {}):
-        buscar()
+    if ((count % 100) == 0):
 
-        
-    if (detections["location_data"] != {}):
-        detectionsAux = detections["location_data"]
-        ballAngleDistance = None
-        markAngleDistance = None
-        try: 
-            ballAngleDistance = detectionsAux['ball']
-        except:
+        detections = yolo_detector.detect(frame)
+        frame = detections["ploted_img"]
+
+        if (detections["location_data"] == {}):
+            buscar()  
+        if (detections["location_data"] != {}):
+            detectionsAux = detections["location_data"]
             ballAngleDistance = None
-        try:
-            markAngleDistance = detectionsAux['mark']
-        except:
             markAngleDistance = None
-        if ballAngleDistance != None:
-            if (ballAngleDistance['rot_angle'] > 5):
-                #gire ixq
-                pass
-            elif ballAngleDistance['rot_angle'] < -5:
-                #gire der
-                pass
+            try: 
+                ballAngleDistance = detectionsAux['ball']
+            except:
+                ballAngleDistance = None
+            try:
+                markAngleDistance = detectionsAux['mark']
+            except:
+                markAngleDistance = None
+            print(ballAngleDistance,markAngleDistance)
+            if ballAngleDistance != None:
+                if (ballAngleDistance['rot_angle'] > 20):
+                    izquierda()
+                    pass
+                elif ballAngleDistance['rot_angle'] < -20:
+                    derecha()
+                    pass
 
-        if (markAngleDistance != None and ballAngleDistance == None):
-            buscar()
-        
-        if (ballAngleDistance != None and markAngleDistance != None):
-            if (ballAngleDistance['rot_angle'] <5 and ballAngleDistance['rot_angle'] > -5):
-                forward(ballAngleDistance['distance'])
-            else:
-                buscarMarco(ballAngleDistance['distance'])
+            if (markAngleDistance != None and ballAngleDistance == None):
+                buscar()
             
-
-
-
-    frame = detections["ploted_img"]
+            if (ballAngleDistance != None and markAngleDistance != None):
+                if (ballAngleDistance['rot_angle'] <20 and ballAngleDistance['rot_angle'] > -20):
+                    forward(ballAngleDistance['distance'])
+            if (ballAngleDistance != None and markAngleDistance == None):
+                buscarMarco(ballAngleDistance['distance'])
+    
     frame = Image.fromarray(frame) if not type(frame) == Image else frame
     frame = frame.resize((img_size[0], img_size[1]))
     imgtk = ImageTk.PhotoImage(image=frame)

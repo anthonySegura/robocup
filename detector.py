@@ -81,7 +81,7 @@ class Detector:
                 # Estos calculos solo funcionan con la configuración para la camara de mi telefono
                 # para usar otra camara hay que cambiar los parametros camera_calibration del archivo config.json
                 rot_angle = rotation_angle(
-                    class_, (x_center, y_center), (X_CENTER, Y_CENTER)
+                    class_, (y_center,x_center), (Y_CENTER,X_CENTER)
                 )
                 # w = w // w
                 distance = get_distance_to_object(class_, w)
