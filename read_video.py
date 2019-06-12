@@ -10,7 +10,7 @@ from PIL import Image, ImageTk
 from detector import Detector
 import time
 import serial 
-#ser = serial.Serial('COM5', 9600)
+ser = serial.Serial('COM7', 9600)
 
 
 def buscar():
@@ -18,9 +18,9 @@ def buscar():
 
 def forward(distance):
     print("forward"+str(distance+10))
-    #ser.write(str.encode('F'))
-    time.sleep(1)
-    #ser.write(str.encode('S'))
+    ser.write(str.encode('F'))
+    time.sleep((distance/96))
+    ser.write(str.encode('S'))
 
 
 
@@ -30,11 +30,11 @@ def buscarMarco(distancia):
     izquierda()
 
 def derecha():
-    #ser.write(str.encode('R'))
+    ser.write(str.encode('R'))
     pass
 
 def izquierda():
-    #ser.write(str.encode('L'))
+    ser.write(str.encode('L'))
     pass
 
 with open("config.json", "r") as file:
@@ -62,6 +62,8 @@ def show_frame():
     detections = yolo_detector.detect(frame)
     if (detections["location_data"] == {}):
         buscar()
+
+        
     if (detections["location_data"] != {}):
         detectionsAux = detections["location_data"]
         ballAngleDistance = None

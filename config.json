@@ -1,5 +1,5 @@
 {
-    "stream_url": "http://172.24.80.213:8080/video",
+    "stream_url": "http://172.24.29.229:8080/video",
     "img_input_resolution": [360, 640],
     "img_output_resolution": [640, 480],
     "camera_calibration": {
@@ -17,7 +17,7 @@
     "yolo_config": {
         "input_size": [416, 416],
         "network_cfg": "yolo/yolov3-tiny.cfg",
-        "weights": "yolo/yolov3-tiny_final.weights",
+        "weights": "yolo/yolov3-tiny_16000.weights",
         "names": "yolo/coco.names",
         "min_confidence": 0.5,
         "threshold": 0.3
